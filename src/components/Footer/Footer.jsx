@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import logo from '../../assets/logo.jpg'
 
 
 
@@ -11,7 +12,7 @@ export default function Footer() {
                     <div className="mb-6 md:mb-0">
                         <Link to="/" className="flex items-center">
                             <img
-                                src="/logo.png"
+                                src={logo}
                                 className="mr-3 h-16"
                                 alt="Logo"
                             />
