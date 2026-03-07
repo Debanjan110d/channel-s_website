@@ -13,7 +13,7 @@ export default function Footer() {
                         <Link to="/" className="flex items-center">
                             <img
                                 src={logo}
-                                className="mr-3 h-16"
+                                className="mr-3 h-20 w-20 rounded-full object-cover border-2 border-orange-500 shadow-md"
                                 alt="Logo"
                             />
                         </Link>
@@ -48,7 +48,7 @@ export default function Footer() {
                                     </a>
                                 </li>
                                 <li>
-                                    <Link to="/" className="hover:underline">
+                                    <Link to="https://discord.com/invite/AaTaHPt8Se" className="hover:underline">
                                         Discord
                                     </Link>
                                 </li>
@@ -58,12 +58,12 @@ export default function Footer() {
                             <h2 className="mb-6 text-sm font-semibold text-gray-100 uppercase">Legal</h2>
                             <ul className="text-gray-400 font-medium">
                                 <li className="mb-4">
-                                    <Link to="#" className="hover:underline">
+                                    <Link to="/privacy" className="hover:underline">
                                         Privacy Policy
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#" className="hover:underline">
+                                    <Link to="/terms" className="hover:underline">
                                         Terms &amp; Conditions
                                     </Link>
                                 </li>

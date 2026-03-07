@@ -1,19 +1,22 @@
 import React from 'react'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
+import ClickSpark from './components/ClickSpark'
 import { Outlet } from 'react-router-dom'// It will make the page dynamic
 
 function Layout() {
   return (
     <>
 
+<ClickSpark>
 <div className="flex flex-col min-h-screen">
-    <Header />
-    <main className="flex-1">
-        <Outlet />  
-    </main>
-    <Footer />
+  <Header />
+  <main className="flex-1">
+    <Outlet />  
+  </main>
+  <Footer />
 </div>
+</ClickSpark>
     </>
   )
 }

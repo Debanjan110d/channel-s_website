@@ -1,41 +1,74 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import logo from '../../assets/logo.jpg'
 
 
 export default function Header() {
+    const [open, setOpen] = useState(false)
+
+    const closeMenu = () => setOpen(false)
+
     return (
         <header className="shadow sticky z-50 top-0">
             <nav className="bg-gray-900 border-gray-700 px-4 lg:px-6 py-2.5">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                    <Link to="/" className="flex items-center">
+                    <Link to="/" className="flex items-center" onClick={closeMenu}>
                         <img
                             src={logo}
-                            className="mr-3 h-12"
+                            className="mr-3 h-14 w-14 rounded-full object-cover border-2 border-orange-500 shadow-md"
                             alt="Logo"
                         />
                     </Link>
-                    <div className="flex items-center lg:order-2">
-                        <Link
-                            to="#"
-                            className="text-gray-200 hover:bg-gray-700 focus:ring-4 focus:ring-gray-600 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            to="#"
-                            className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                        >
-                            Get started
-                        </Link>
-                    </div>
-                    <div
-                        className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
-                        id="mobile-menu-2"
+
+                    <button
+                        type="button"
+                        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-200 rounded-lg lg:hidden hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        aria-controls="mobile-menu"
+                        aria-expanded={open}
+                        onClick={() => setOpen(prev => !prev)}
                     >
-                        <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                        <span className="sr-only">Open navigation</span>
+                        <svg
+                            className={`w-7 h-7 text-gray-200 transition-all duration-200 ${open ? 'text-orange-400' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            {/* Left bracket */}
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className={`transition-transform duration-200 ${open ? '-translate-x-0.5' : ''}`}
+                                d="M8 6L4 12l4 6"
+                            />
+                            {/* Right bracket */}
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className={`transition-transform duration-200 ${open ? 'translate-x-0.5' : ''}`}
+                                d="M16 6l4 6-4 6"
+                            />
+                            {/* Slash appears when open */}
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className={`transition-opacity transition-transform duration-200 ${open ? 'opacity-100' : 'opacity-0 translate-y-1'}`}
+                                d="M10 6l4 12"
+                            />
+                        </svg>
+                    </button>
+
+                    <div
+                        className={`${open ? 'flex' : 'hidden'} justify-between items-center w-full lg:flex lg:w-auto lg:order-1`}
+                        id="mobile-menu"
+                    >
+                        <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 w-full lg:w-auto">
                             <li>
                                 <NavLink
+                                    to="/"
+                                    onClick={closeMenu}
                                     className={({ isActive }) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
@@ -43,8 +76,39 @@ export default function Header() {
                                     Home
                                 </NavLink>
                             </li>
-                            
-                            
+                            <li>
+                                <NavLink
+                                    to="/about"
+                                    onClick={closeMenu}
+                                    className={({ isActive }) =>
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                    }
+                                >
+                                    About
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to="/contact"
+                                    onClick={closeMenu}
+                                    className={({ isActive }) =>
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                    }
+                                >
+                                    Contact
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to="/github"
+                                    onClick={closeMenu}
+                                    className={({ isActive }) =>
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                    }
+                                >
+                                    GithubStats
+                                </NavLink>
+                            </li>
                         </ul>
                     </div>
                 </div>

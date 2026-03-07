@@ -1,0 +1,77 @@
+.spot-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05), rgba(12, 16, 32, 0.95));
+  padding: 24px;
+  color: #e5e7eb;
+  isolation: isolate;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.spot-card:hover {
+  border-color: rgba(249, 115, 22, 0.6);
+  transform: translateY(-4px);
+}
+
+.spot-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(220px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(249, 115, 22, 0.25), transparent 45%);
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: -1;
+}
+
+.spot-card:hover .spot-spotlight {
+  opacity: 1;
+}
+
+.spot-body {
+  display: grid;
+  gap: 8px;
+}
+
+.spot-tag {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fb923c;
+  font-weight: 700;
+}
+
+.spot-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.spot-subtitle {
+  font-size: 16px;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.spot-description {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.spot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-weight: 700;
+  color: #fb923c;
+  text-decoration: none;
+}
+
+.spot-link:hover {
+  text-decoration: underline;
+}
