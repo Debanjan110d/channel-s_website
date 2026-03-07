@@ -1,4 +1,5 @@
-import React, { useRef } from "react"
+import React, { useRef, useCallback } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import "./SpotlightCard.css"
 
 export default function SpotlightCard({
@@ -9,6 +10,27 @@ export default function SpotlightCard({
   cta = "View more",
 }) {
   const ref = useRef(null)
+  const navigate = useNavigate()
+  const isInternal = href && href.startsWith("/") && !href.startsWith("//")
+
+  const handleNavigate = useCallback(() => {
+    if (!href) return
+    if (isInternal) {
+      navigate(href)
+    } else {
+      window.open(href, "_blank", "noreferrer")
+    }
+  }, [href, isInternal, navigate])
+
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault()
+        handleNavigate()
+      }
+    },
+    [handleNavigate]
+  )
 
   const handleMove = (e) => {
     const el = ref.current
@@ -33,6 +55,10 @@ export default function SpotlightCard({
       className="spot-card"
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
+      onClick={handleNavigate}
+      onKeyDown={handleKeyDown}
+      role={href ? "link" : undefined}
+      tabIndex={href ? 0 : -1}
     >
       <div className="spot-spotlight" aria-hidden="true" />
       <div className="spot-body">
@@ -41,9 +67,21 @@ export default function SpotlightCard({
         <p className="spot-subtitle">{subtitle}</p>
         <p className="spot-description">{description}</p>
         {href && (
-          <a className="spot-link" href={href} target="_blank" rel="noreferrer">
-            {cta} <span aria-hidden>↗</span>
-          </a>
+          isInternal ? (
+            <Link className="spot-link" to={href} onClick={(e) => e.stopPropagation()}>
+              {cta} <span aria-hidden>↗</span>
+            </Link>
+          ) : (
+            <a
+              className="spot-link"
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {cta} <span aria-hidden>↗</span>
+            </a>
+          )
         )}
       </div>
     </article>

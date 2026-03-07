@@ -267,20 +267,22 @@ function ActivityChart({ data, loading }) {
                 <p className="text-gray-500 text-sm">No recent commit activity.</p>
             ) : (
                 <>
-                    <div className="flex items-end gap-2 h-40">
-                        {data.map((point) => {
-                            const height = max ? Math.max(6, Math.round((point.count / max) * 100)) : 6
-                            return (
-                                <div key={point.label} className="flex flex-col items-center gap-2 min-w-[18px]">
-                                    <div
-                                        className="w-6 rounded-md bg-orange-500/80 border border-orange-400/60"
-                                        style={{ height: `${height}%`, minHeight: "8px" }}
-                                        title={`${point.label}: ${point.count} commits`}
-                                    ></div>
-                                    <p className="text-[11px] text-gray-400 leading-none">{point.label}</p>
-                                </div>
-                            )
-                        })}
+                    <div className="overflow-x-auto -mx-2 px-2">
+                        <div className="flex items-end gap-2 h-40 min-w-[520px] sm:min-w-0">
+                            {data.map((point) => {
+                                const height = max ? Math.max(6, Math.round((point.count / max) * 100)) : 6
+                                return (
+                                    <div key={point.label} className="flex flex-col items-center gap-2 min-w-[18px]">
+                                        <div
+                                            className="w-6 rounded-md bg-orange-500/80 border border-orange-400/60"
+                                            style={{ height: `${height}%`, minHeight: "8px" }}
+                                            title={`${point.label}: ${point.count} commits`}
+                                        ></div>
+                                        <p className="text-[11px] text-gray-400 leading-none">{point.label}</p>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-4">Data from public push events (GitHub API).</p>
                 </>

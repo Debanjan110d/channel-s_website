@@ -8,6 +8,7 @@
   color: #e5e7eb;
   isolation: isolate;
   transition: border-color 180ms ease, transform 180ms ease;
+  cursor: pointer;
 }
 
 .spot-card:hover {
@@ -27,6 +28,11 @@
 
 .spot-card:hover .spot-spotlight {
   opacity: 1;
+}
+
+.spot-card:focus-visible {
+  outline: 2px solid rgba(249, 115, 22, 0.7);
+  outline-offset: 3px;
 }
 
 .spot-body {
