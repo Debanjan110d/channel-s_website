@@ -92,8 +92,8 @@ export default function GithubStats() {
     const hasError = status === "error"
 
     return (
-        <div className="bg-gray-900 py-20 text-white min-h-screen">
-            <div className="max-w-6xl mx-auto px-6">
+        <div className="py-20 text-white min-h-screen">
+            <div className="max-w-6xl mx-auto px-6 rounded-3xl border border-white/10 bg-[#08142e]/45 backdrop-blur-md p-6 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
                 <header className="text-center">
                     <p className="text-orange-400 uppercase text-xs font-semibold tracking-[0.2em]">Live GitHub Snapshot</p>
                     <h2 className="text-4xl font-bold mt-3">GitHub Activity</h2>
@@ -112,7 +112,7 @@ export default function GithubStats() {
                 </header>
 
                 <section className="mt-12 grid gap-6 md:grid-cols-2">
-                    <div className="bg-gray-800/70 border border-gray-700 rounded-2xl p-6 shadow-lg">
+                    <div className="bg-[#0d1a34]/65 border border-white/10 rounded-2xl p-6 shadow-lg">
                         <div className="flex items-center gap-4">
                             <div className="h-14 w-14 rounded-full bg-orange-500/20 border border-orange-400/40 flex items-center justify-center text-2xl">
                                 {profile?.avatar_url ? (
@@ -139,7 +139,7 @@ export default function GithubStats() {
                         </div>
                     </div>
 
-                    <div className="bg-gray-800/70 border border-gray-700 rounded-2xl p-6 shadow-lg space-y-5">
+                    <div className="bg-[#0d1a34]/65 border border-white/10 rounded-2xl p-6 shadow-lg space-y-5">
                         <h3 className="text-lg font-semibold">Repository Overview</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <StatCard label="Stars" value={repoStats.stars} loading={isLoading} accent="text-yellow-300" />
@@ -147,7 +147,7 @@ export default function GithubStats() {
                             <StatCard label="Top Lang" value={repoStats.topLanguage} loading={isLoading} />
                         </div>
 
-                        <div className="bg-gray-900/60 border border-gray-700 rounded-xl p-4">
+                        <div className="bg-[#071326]/75 border border-white/10 rounded-xl p-4">
                             <p className="text-sm text-gray-400">Profile created</p>
                             <p className="text-xl font-semibold mt-1">
                                 {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : "--"}
@@ -162,7 +162,7 @@ export default function GithubStats() {
                                     {languages.map(({ language, count }) => (
                                         <span
                                             key={language}
-                                            className="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-900/60 px-3 py-1 text-sm text-gray-200"
+                                            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#071326]/75 px-3 py-1 text-sm text-gray-200"
                                         >
                                             {language}
                                             <span className="text-xs text-gray-400">{count} repos</span>
@@ -204,7 +204,7 @@ export default function GithubStats() {
 
 function StatCard({ label, value, loading, accent }) {
     return (
-        <div className="rounded-xl border border-gray-700 bg-gray-900/60 p-4">
+        <div className="rounded-xl border border-white/10 bg-[#071326]/75 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
             <p className={`text-2xl font-bold mt-2 ${accent || "text-white"}`}>
                 {loading ? "--" : value ?? "--"}
@@ -215,7 +215,7 @@ function StatCard({ label, value, loading, accent }) {
 
 function HighlightCard({ title, repo, loading, fallback }) {
     return (
-        <div className="rounded-2xl border border-gray-700 bg-gray-800/70 p-6 shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-[#0d1a34]/65 p-6 shadow-lg">
             <p className="text-sm text-gray-400">{title}</p>
             {loading ? (
                 <p className="mt-3 text-gray-500">Loading...</p>
@@ -231,19 +231,19 @@ function HighlightCard({ title, repo, loading, fallback }) {
                     </a>
                     {repo.description && <p className="text-gray-300 text-sm leading-6">{repo.description}</p>}
                     <div className="flex flex-wrap gap-3 text-sm text-gray-300 mt-2">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-gray-900/70 px-3 py-1 border border-gray-700">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#071326]/75 px-3 py-1 border border-white/10">
                             ⭐ {repo.stargazers_count}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-gray-900/70 px-3 py-1 border border-gray-700">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#071326]/75 px-3 py-1 border border-white/10">
                             🍴 {repo.forks_count}
                         </span>
                         {repo.language && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-900/70 px-3 py-1 border border-gray-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#071326]/75 px-3 py-1 border border-white/10">
                                 {repo.language}
                             </span>
                         )}
                         {repo.pushed_at && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-900/70 px-3 py-1 border border-gray-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#071326]/75 px-3 py-1 border border-white/10">
                                 Updated {new Date(repo.pushed_at).toLocaleDateString()}
                             </span>
                         )}
@@ -260,7 +260,7 @@ function ActivityChart({ data, loading }) {
     const max = data.reduce((m, point) => Math.max(m, point.count), 0)
 
     return (
-        <div className="rounded-2xl border border-gray-700 bg-gray-800/70 p-6 shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-[#0d1a34]/65 p-6 shadow-lg">
             {loading ? (
                 <p className="text-gray-500 text-sm">Loading...</p>
             ) : data.length === 0 ? (
@@ -268,11 +268,11 @@ function ActivityChart({ data, loading }) {
             ) : (
                 <>
                     <div className="overflow-x-auto -mx-2 px-2">
-                        <div className="flex items-end gap-2 h-40 min-w-[520px] sm:min-w-0">
+                        <div className="flex items-end gap-2 h-40 min-w-130 sm:min-w-0">
                             {data.map((point) => {
                                 const height = max ? Math.max(6, Math.round((point.count / max) * 100)) : 6
                                 return (
-                                    <div key={point.label} className="flex flex-col items-center gap-2 min-w-[18px]">
+                                    <div key={point.label} className="flex flex-col items-center gap-2 min-w-4.5">
                                         <div
                                             className="w-6 rounded-md bg-orange-500/80 border border-orange-400/60"
                                             style={{ height: `${height}%`, minHeight: "8px" }}

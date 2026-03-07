@@ -10,6 +10,8 @@ import GithubStats from './components/GithubStats/Github.jsx'
 import Privacy from './components/Privacy/Privacy.jsx'
 import Terms from './components/Terms/Terms.jsx'
 import User from './components/User/User.jsx'
+import LatestVideos from './components/Videos/LatestVideos.jsx'
+import LatestShorts from './components/Videos/LatestShorts.jsx'
 
 
 // const router = createBrowserRouter([
@@ -36,6 +38,8 @@ const router =createBrowserRouter(
       <Route path='/about' element={<About />} />
       <Route path='/contact' element={<Contact />} />
       <Route path='/github' element={<GithubStats />} />
+      <Route path='/videos' element={<LatestVideos />} />
+      <Route path='/shorts' element={<LatestShorts />} />
       <Route path='/privacy' element={<Privacy />} />
       <Route path='/terms' element={<Terms />} />
       <Route path='/user/:userid' element={<User />} />

@@ -8,8 +8,9 @@ import SpotlightCard from "../common/SpotlightCard"
 
 export default function About() {
   return (
-    <div className="py-20 bg-gray-900 text-gray-300">
-      <div className="max-w-6xl mx-auto px-6 md:px-10 space-y-12">
+    <div className="py-20 text-gray-200">
+      <div className="max-w-6xl mx-auto px-6 md:px-10">
+        <div className="rounded-3xl border border-white/10 bg-[#08142e]/45 backdrop-blur-md p-6 md:p-10 space-y-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
         {/* Hero copy with animations */}
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
@@ -114,7 +115,7 @@ export default function About() {
             {["React", "Next.js", "Vite", "Node.js", "Express", "Tailwind CSS"].map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-gray-700 bg-gray-800 px-3 py-1 text-sm text-gray-200"
+                className="rounded-full border border-white/15 bg-[#0d1a34]/70 px-3 py-1 text-sm text-gray-100"
               >
                 {tech}
               </span>
@@ -124,7 +125,7 @@ export default function About() {
             {["JavaScript", "TypeScript"].map((lang) => (
               <span
                 key={lang}
-                className="rounded-full border border-gray-700 bg-gray-800 px-3 py-1 text-sm text-gray-200"
+                className="rounded-full border border-white/15 bg-[#0d1a34]/70 px-3 py-1 text-sm text-gray-100"
               >
                 {lang}
               </span>
@@ -149,6 +150,7 @@ export default function About() {
             cta="Send a note"
           />
         </div>
+        </div>
       </div>
     </div>
   )
@@ -156,7 +158,7 @@ export default function About() {
 
 function InfoBlock({ title, items }) {
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-800/60 p-4 shadow">
+    <div className="rounded-xl border border-white/10 bg-[#0d1a34]/60 p-4 shadow">
       <p className="text-sm text-orange-300 font-semibold">{title}</p>
       <ul className="mt-2 space-y-1 text-gray-300 list-disc list-inside">
         {items.map((item) => (

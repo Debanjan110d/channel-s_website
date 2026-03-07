@@ -6,8 +6,8 @@ import logo from '../../assets/logo.jpg'
 
 export default function Footer() {
     return (
-        <footer className="bg-gray-900 border-gray-700 border-y">
-            <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+        <footer className="border-y border-white/10 bg-[#071326]/70 backdrop-blur-md">
+            <div className="mx-auto w-full max-w-7xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
                         <Link to="/" className="flex items-center">
@@ -71,7 +71,7 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <hr className="my-6 border-gray-700 sm:mx-auto lg:my-8" />
+                <hr className="my-6 border-white/10 sm:mx-auto lg:my-8" />
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <span className="text-sm text-gray-400 sm:text-center">
                         © 2023

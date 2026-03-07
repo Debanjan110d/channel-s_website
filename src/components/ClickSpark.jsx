@@ -12,21 +12,28 @@ const ClickSpark = ({
 }) => {
   const canvasRef = useRef(null);
   const sparksRef = useRef([]);
+  const pixelRatioRef = useRef(1);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
     let resizeTimeout;
 
     const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.floor(window.innerWidth);
+      const height = Math.floor(window.innerHeight);
+      const scaledWidth = Math.floor(width * dpr);
+      const scaledHeight = Math.floor(height * dpr);
+
+      pixelRatioRef.current = dpr;
+
+      if (canvas.width !== scaledWidth || canvas.height !== scaledHeight) {
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
       }
     };
 
@@ -36,7 +43,7 @@ const ClickSpark = ({
     };
 
     const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
+    ro.observe(document.body);
 
     resizeCanvas();
 
@@ -109,9 +116,11 @@ const ClickSpark = ({
   const handleClick = e => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    const dpr = pixelRatioRef.current || 1;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e.clientX - rect.left) * dpr;
+    const y = (e.clientY - rect.top) * dpr;
 
     const now = performance.now();
     const newSparks = Array.from({ length: sparkCount }, (_, i) => ({
@@ -128,7 +137,8 @@ const ClickSpark = ({
     <div className="relative w-full min-h-screen" onClick={handleClick}>
       <canvas
         ref={canvasRef}
-        className="w-full h-full block absolute top-0 left-0 select-none pointer-events-none"
+        className="fixed inset-0 w-full h-full block select-none pointer-events-none z-70"
+        aria-hidden="true"
       />
       {children}
     </div>

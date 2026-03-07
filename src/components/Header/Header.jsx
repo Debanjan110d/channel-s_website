@@ -9,9 +9,9 @@ export default function Header() {
     const closeMenu = () => setOpen(false)
 
     return (
-        <header className="shadow sticky z-50 top-0">
-            <nav className="bg-gray-900 border-gray-700 px-4 lg:px-6 py-2.5">
-                <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+        <header className="sticky z-50 top-0 border-b border-white/10 bg-[#071326]/70 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+            <nav className="px-4 lg:px-6 py-2.5">
+                <div className="flex flex-wrap justify-between items-center mx-auto max-w-7xl">
                     <Link to="/" className="flex items-center" onClick={closeMenu}>
                         <img
                             src={logo}
@@ -22,7 +22,7 @@ export default function Header() {
 
                     <button
                         type="button"
-                        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-200 rounded-lg lg:hidden hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-200 rounded-lg lg:hidden hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         aria-controls="mobile-menu"
                         aria-expanded={open}
                         onClick={() => setOpen(prev => !prev)}
@@ -54,7 +54,7 @@ export default function Header() {
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className={`transition-opacity transition-transform duration-200 ${open ? 'opacity-100' : 'opacity-0 translate-y-1'}`}
+                                className={`transition-all duration-200 ${open ? 'opacity-100' : 'opacity-0 translate-y-1'}`}
                                 d="M10 6l4 12"
                             />
                         </svg>
@@ -70,7 +70,7 @@ export default function Header() {
                                     to="/"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     Home
@@ -81,7 +81,7 @@ export default function Header() {
                                     to="/about"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     About
@@ -92,7 +92,7 @@ export default function Header() {
                                     to="/contact"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     Contact
@@ -100,10 +100,32 @@ export default function Header() {
                             </li>
                             <li>
                                 <NavLink
+                                    to="/videos"
+                                    onClick={closeMenu}
+                                    className={({ isActive }) =>
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                    }
+                                >
+                                    Latest Videos
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to="/shorts"
+                                    onClick={closeMenu}
+                                    className={({ isActive }) =>
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                    }
+                                >
+                                    Shorts
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
                                     to="/github"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-gray-700 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     GithubStats

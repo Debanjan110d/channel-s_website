@@ -45,11 +45,11 @@ export default function Contact() {
 
   return (
     <>
-      <div className="bg-gray-900 py-20">
+      <div className="py-20 text-gray-200">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10">
 
           {/* LEFT SIDE */}
-          <div className="bg-gray-800 p-8 rounded-xl">
+          <div className="rounded-2xl border border-white/10 bg-[#08142e]/55 backdrop-blur-md p-8 shadow-[0_18px_50px_rgba(0,0,0,0.35)]">
             <h1 className="text-3xl text-white font-bold">
               Let's Connect
             </h1>
@@ -67,14 +67,18 @@ export default function Contact() {
           </div>
 
           {/* FORM */}
-          <form ref={form} onSubmit={sendEmail} className="flex flex-col gap-4">
+          <form
+            ref={form}
+            onSubmit={sendEmail}
+            className="rounded-2xl border border-white/10 bg-[#08142e]/55 backdrop-blur-md p-6 sm:p-8 shadow-[0_18px_50px_rgba(0,0,0,0.35)] flex flex-col gap-4"
+          >
 
             <input
               type="text"
               name="user_name"
               placeholder="Full Name"
               required
-              className="py-3 px-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 focus:border-orange-500"
+              className="py-3 px-3 rounded-lg bg-[#0b1933]/70 border border-white/15 text-gray-100 placeholder:text-gray-400 focus:border-orange-500"
             />
 
             <input
@@ -82,7 +86,7 @@ export default function Contact() {
               name="user_email"
               placeholder="Email"
               required
-              className="py-3 px-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 focus:border-orange-500"
+              className="py-3 px-3 rounded-lg bg-[#0b1933]/70 border border-white/15 text-gray-100 placeholder:text-gray-400 focus:border-orange-500"
             />
 
             <textarea
@@ -90,7 +94,7 @@ export default function Contact() {
               placeholder="Your Message"
               rows="4"
               required
-              className="py-3 px-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 focus:border-orange-500"
+              className="py-3 px-3 rounded-lg bg-[#0b1933]/70 border border-white/15 text-gray-100 placeholder:text-gray-400 focus:border-orange-500"
             />
 
             <button

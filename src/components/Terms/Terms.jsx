@@ -2,8 +2,9 @@ import React from 'react'
 
 export default function Terms() {
     return (
-        <div className="bg-gray-900 text-gray-300 py-20">
+        <div className="text-gray-300 py-20">
             <div className="max-w-4xl mx-auto px-6">
+                <div className="rounded-3xl border border-white/10 bg-[#08142e]/50 backdrop-blur-md p-6 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
 
                 <h1 className="text-4xl font-bold text-white mb-8">
                     Terms &amp; Conditions
@@ -61,6 +62,8 @@ export default function Terms() {
                 <p>
                     These terms may be updated in the future as the website evolves.
                 </p>
+
+                </div>
 
             </div>
         </div>
