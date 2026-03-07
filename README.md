@@ -1,30 +1,20 @@
 # channel-s_website
 
-React 19 + Vite app with react-router v7 and Tailwind (v4 import via `@import "tailwindcss"` in `src/index.css`).
+Live site: https://gammercodeweb.vercel.app/
 
-## Getting started
-- Install: `npm install`
-- Dev server: `npm run dev` then open the shown local URL
-- Build: `npm run build`
+## Stack
+- React 19 + Vite
+- React Router v7
+- Tailwind CSS (v4 import via `@import "tailwindcss"` in `src/index.css`)
+
+## Run it locally
+- Install deps: `npm install`
+- Start dev server: `npm run dev`
+- Build for prod: `npm run build`
 - Preview build: `npm run preview`
 
-## Routing
-- Defined in `src/main.jsx` with `createBrowserRouter`
-- Layout component at `src/Layout.jsx` renders header/footer and an `<Outlet />`
-- Example child routes: `/` (Home), `/about` (About), `/contact`, `/github`
-
-## Assets (logo)
-- Logo lives at `src/assets/logo.jpg`
-- Header and footer import it directly: `import logo from '../../assets/logo.jpg'`
-- If you replace the logo, keep the filename or update the import paths in `Header.jsx` and `Footer.jsx`
-
-## Project structure (trimmed)
-- `src/components/Header/Header.jsx` – nav + logo
-- `src/components/Footer/Footer.jsx` – footer + logo
+## Project map (quick)
+- `src/Layout.jsx` – shared layout
+- `src/components/Header/Header.jsx` – top nav
+- `src/components/Footer/Footer.jsx` – footer + socials
 - `src/components/Home/Home.jsx` – home page
-- `src/components/About/About.jsx` – about page
-- `src/Layout.jsx` – shared layout with `<Outlet />`
-
-## Notes
-- Uses `strict` mode in `main.jsx`
-- Tailwind 4 via `@import "tailwindcss"` in `src/index.css`
