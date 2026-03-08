@@ -3,7 +3,21 @@ import logo from '../../assets/logo.jpg'
 import BlurText from '../common/BlurText'
 import DecryptedText from '../common/DecryptedText'
 import SpotlightCard from '../common/SpotlightCard'
+import { PulsatingButton } from '@/registry/magicui/pulsating-button'
 
+
+function PulsatingButtonDemo() {
+    return (
+        <PulsatingButton
+            type="button"
+            pulseColor="rgba(249, 115, 22, 0.45)"
+            className="mt-8 md:mt-10 bg-orange-600 hover:bg-orange-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ease-out transform hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/30"
+            onClick={() => window.open('https://www.youtube.com/@GamersCodeLab', '_blank', 'noopener,noreferrer')}
+        >
+            Explore Now
+        </PulsatingButton>
+    )
+}
 
 
 export default function Home() {
@@ -50,14 +64,7 @@ export default function Home() {
                             animateOn="hover"
                         />
 
-                        <a
-                            href="https://www.youtube.com/@GamersCodeLab"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-block bg-orange-600 hover:bg-orange-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ease-out mt-8 md:mt-10 transform hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/30"
-                        >
-                            Explore Now
-                        </a>
+                        <PulsatingButtonDemo />
                     </div>
 
             </div>

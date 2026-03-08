@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-
-const FEED_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=UChuGtKOtKDiEv-eaqhyyKpg'
+import { useLoaderData } from 'react-router-dom'
+import { getYoutubeFeed } from '../../lib/youtubeFeed'
 
 const extractVideoId = link => {
   if (!link) return null
@@ -11,37 +10,27 @@ const extractVideoId = link => {
   return null
 }
 
-export default function LatestShorts() {
-  const [shorts, setShorts] = useState([])
-  const [error, setError] = useState(null)
+export async function latestShortsLoader() {
+  try {
+    const data = await getYoutubeFeed()
+    const items = Array.isArray(data?.items) ? data.items : []
+    const filtered = items.filter(item => {
+      const link = item?.link || ''
+      const categories = Array.isArray(item?.categories) ? item.categories.map(c => c.toLowerCase()) : []
+      return /shorts\//.test(link) || /\bshorts\b/.test(link) || categories.includes('shorts')
+    })
 
-  useEffect(() => {
-    let isMounted = true
-
-    fetch(FEED_URL)
-      .then(res => {
-        if (!res.ok) throw new Error('Unable to reach feed')
-        return res.json()
-      })
-      .then(data => {
-        if (!isMounted) return
-        const items = Array.isArray(data?.items) ? data.items : []
-        const filtered = items.filter(item => {
-          const link = item?.link || ''
-          const categories = Array.isArray(item?.categories) ? item.categories.map(c => c.toLowerCase()) : []
-          return /shorts\//.test(link) || /\bshorts\b/.test(link) || categories.includes('shorts')
-        })
-        setShorts(filtered)
-      })
-      .catch(() => {
-        if (!isMounted) return
-        setError('Unable to load shorts right now. Please try again shortly.')
-      })
-
-    return () => {
-      isMounted = false
+    return { shorts: filtered, error: null }
+  } catch {
+    return {
+      shorts: [],
+      error: 'Unable to load shorts right now. Please try again shortly.',
     }
-  }, [])
+  }
+}
+
+export default function LatestShorts() {
+  const { shorts, error } = useLoaderData()
 
   const shortsToShow = shorts.slice(0, 6)
 

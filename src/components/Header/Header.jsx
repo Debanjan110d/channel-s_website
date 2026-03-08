@@ -1,6 +1,30 @@
-import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
+import { Link, NavLink, useFetcher } from 'react-router-dom'
 import logo from '../../assets/logo.jpg'
+
+function PrefetchNavLink({ to, onClick, className, prefetch = false, children }) {
+    const fetcher = useFetcher()
+    const hasPrefetchedRef = useRef(false)
+
+    const prefetchRoute = () => {
+        if (!prefetch || hasPrefetchedRef.current) return
+        hasPrefetchedRef.current = true
+        fetcher.load(to)
+    }
+
+    return (
+        <NavLink
+            to={to}
+            onClick={onClick}
+            onMouseEnter={prefetchRoute}
+            onFocus={prefetchRoute}
+            onTouchStart={prefetchRoute}
+            className={className}
+        >
+            {children}
+        </NavLink>
+    )
+}
 
 
 export default function Header() {
@@ -66,7 +90,7 @@ export default function Header() {
                     >
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 w-full lg:w-auto">
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
@@ -74,10 +98,10 @@ export default function Header() {
                                     }
                                 >
                                     Home
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/about"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
@@ -85,10 +109,10 @@ export default function Header() {
                                     }
                                 >
                                     About
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/contact"
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
@@ -96,40 +120,43 @@ export default function Header() {
                                     }
                                 >
                                     Contact
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/videos"
+                                    prefetch
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     Latest Videos
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/shorts"
+                                    prefetch
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     Shorts
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                             <li>
-                                <NavLink
+                                <PrefetchNavLink
                                     to="/github"
+                                    prefetch
                                     onClick={closeMenu}
                                     className={({ isActive }) =>
                                         `block py-2 pr-4 pl-3 duration-200 border-b ${isActive ? 'text-orange-400' : 'text-gray-200'} border-white/10 hover:bg-white/10 lg:hover:bg-transparent lg:border-0 hover:text-orange-400 lg:p-0`
                                     }
                                 >
                                     GithubStats
-                                </NavLink>
+                                </PrefetchNavLink>
                             </li>
                         </ul>
                     </div>

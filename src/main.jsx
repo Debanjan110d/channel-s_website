@@ -12,6 +12,9 @@ import Terms from './components/Terms/Terms.jsx'
 import User from './components/User/User.jsx'
 import LatestVideos from './components/Videos/LatestVideos.jsx'
 import LatestShorts from './components/Videos/LatestShorts.jsx'
+import { githubStatsLoader } from './components/GithubStats/Github.jsx'
+import { latestVideosLoader } from './components/Videos/LatestVideos.jsx'
+import { latestShortsLoader } from './components/Videos/LatestShorts.jsx'
 
 
 // const router = createBrowserRouter([
@@ -37,9 +40,9 @@ const router =createBrowserRouter(
       <Route index element={<Home />} />
       <Route path='/about' element={<About />} />
       <Route path='/contact' element={<Contact />} />
-      <Route path='/github' element={<GithubStats />} />
-      <Route path='/videos' element={<LatestVideos />} />
-      <Route path='/shorts' element={<LatestShorts />} />
+      <Route path='/github' element={<GithubStats />} loader={githubStatsLoader} />
+      <Route path='/videos' element={<LatestVideos />} loader={latestVideosLoader} />
+      <Route path='/shorts' element={<LatestShorts />} loader={latestShortsLoader} />
       <Route path='/privacy' element={<Privacy />} />
       <Route path='/terms' element={<Terms />} />
       <Route path='/user/:userid' element={<User />} />
