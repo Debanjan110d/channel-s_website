@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import ClickSpark from './components/ClickSpark'
 import LightPillar from './components/LightPillar'
 import { Outlet } from 'react-router-dom'// It will make the page dynamic
+import RouteLoadingOverlay from './components/common/RouteLoadingOverlay'
+import LoadingOverlay from './components/common/LoadingOverlay'
+
+const INITIAL_BOOT_OVERLAY_MS = 700
 
 function Layout() {
+  const [showBootOverlay, setShowBootOverlay] = useState(true)
+  const [isRouteOverlayVisible, setIsRouteOverlayVisible] = useState(false)
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setShowBootOverlay(false), INITIAL_BOOT_OVERLAY_MS)
+    return () => window.clearTimeout(timeoutId)
+  }, [])
+
+  const animationsBlocked = showBootOverlay || isRouteOverlayVisible
+
   return (
     <>
       <ClickSpark>
@@ -16,7 +30,7 @@ function Layout() {
               topColor="#FF6A00"
               bottomColor="#FFC857"
               intensity={0.78}
-              rotationSpeed={0.26}
+              rotationSpeed={animationsBlocked ? 0 : 0.26}
               glowAmount={0.0018}
               pillarWidth={3.2}
               pillarHeight={0.42}
@@ -32,8 +46,10 @@ function Layout() {
 
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1">
-              <Outlet />
+            <main className="relative flex-1">
+              {!animationsBlocked && <Outlet />}
+              {showBootOverlay && <LoadingOverlay scope="content" label="Booting Channel-S..." />}
+              {!showBootOverlay && <RouteLoadingOverlay onVisibilityChange={setIsRouteOverlayVisible} />}
             </main>
             <Footer />
           </div>

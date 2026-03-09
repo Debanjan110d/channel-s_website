@@ -2,8 +2,42 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  background-color: #050814;
+}
+
+
+
 body {
-  background-color: #111827; /* gray-900 */
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #050814;
+  color: #fff;
+  scrollbar-color: #263a72 #050814;
+}
+
+/* Keep scrollbar aligned with the site theme to avoid bright white edge strips. */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #050814;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid #050814;
+  background: linear-gradient(180deg, #35508e 0%, #24386b 100%);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4a6ab3 0%, #2f4b89 100%);
 }
 
 @theme inline {

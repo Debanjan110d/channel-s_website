@@ -47,8 +47,8 @@ export default function LatestVideos() {
   const videosToShow = videos.slice(0, 6)
 
   return (
-    <section className="relative overflow-hidden py-12 text-white md:py-20">
-      <div className="pointer-events-none absolute inset-x-0 top-12 h-72 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2),rgba(8,20,46,0))]" />
+    <section className="relative -mt-px overflow-hidden bg-transparent py-12 text-white md:py-20">
+      <div className="pointer-events-none absolute inset-x-0 -top-16 h-80 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2),rgba(8,20,46,0))]" />
 
       <header className="relative mx-auto hidden max-w-5xl px-4 text-center md:block">
         <h1 className="text-4xl font-bold md:text-5xl">Latest Videos</h1>
@@ -96,8 +96,7 @@ export default function LatestVideos() {
             </ul>
           </aside>
 
-          <div className="relative h-[500px] overflow-hidden sm:h-[580px] md:h-[660px] lg:h-[860px]">
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-52 bg-[linear-gradient(to_top,rgba(8,20,46,0.7),rgba(8,20,46,0))]" />
+          <div className="relative flex h-125 items-center justify-center overflow-visible border-0 outline-none shadow-none sm:h-145 md:h-165 lg:h-215">
             <CardSwap
               width={720}
               height={470}
@@ -105,7 +104,7 @@ export default function LatestVideos() {
               verticalDistance={86}
               delay={5000}
               pauseOnHover={false}
-              containerClassName="left-1/2 top-[10%] origin-top transform -translate-x-1/2 translate-y-0 max-[1280px]:top-[12%] max-[1024px]:top-[14%] max-[1024px]:scale-[0.82] max-[768px]:top-[16%] max-[768px]:scale-[0.66] max-[520px]:top-[18%] max-[520px]:scale-[0.58]"
+              containerClassName="left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[1280px]:scale-[0.9] max-[1024px]:scale-[0.82] max-[768px]:scale-[0.66] max-[520px]:scale-[0.58]"
             >
               {videosToShow.map(video => {
                 const videoId = extractVideoId(video?.link)
@@ -117,12 +116,12 @@ export default function LatestVideos() {
                 const videoTitle = decodeHtml(video?.title || 'YouTube video')
 
                 return (
-                  <Card key={videoId} customClass="overflow-hidden border-white/20 bg-[#060c1b] shadow-[0_20px_48px_rgba(0,0,0,0.45)]">
+                  <Card key={videoId} customClass="overflow-hidden border-white/10 bg-[#060c1b] shadow-none outline-none ring-0">
                     <article className="h-full w-full p-4">
                       <div className="h-full rounded-xl border border-white/10 bg-[#030814] p-4">
                         <iframe
                           src={`https://www.youtube.com/embed/${videoId}`}
-                          className="h-[300px] w-full rounded-lg md:h-[320px]"
+                          className="h-75 w-full rounded-lg md:h-80"
                           title={videoTitle}
                           allowFullScreen
                         />

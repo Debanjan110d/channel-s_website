@@ -15,6 +15,7 @@ import LatestShorts from './components/Videos/LatestShorts.jsx'
 import { githubStatsLoader } from './components/GithubStats/Github.jsx'
 import { latestVideosLoader } from './components/Videos/LatestVideos.jsx'
 import { latestShortsLoader } from './components/Videos/LatestShorts.jsx'
+import InitialRouteFallback from './components/common/InitialRouteFallback.jsx'
 
 
 // const router = createBrowserRouter([
@@ -53,6 +54,6 @@ const router =createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={router} fallbackElement={<InitialRouteFallback />} />
   </StrictMode>,
 )
