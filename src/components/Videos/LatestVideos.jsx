@@ -3,6 +3,7 @@ import { getYoutubeFeed } from '../../lib/youtubeFeed'
 import CardSwap, { Card } from '../CardSwap'
 
 const isShort = item => {
+  if (item?.isShort) return true
   const link = item?.link || ''
   const categories = Array.isArray(item?.categories) ? item.categories.map(c => c.toLowerCase()) : []
   return /shorts\//.test(link) || /\bshorts\b/.test(link) || categories.includes('shorts')
@@ -32,19 +33,31 @@ export async function latestVideosLoader() {
     const data = await getYoutubeFeed()
     const items = Array.isArray(data?.items) ? data.items : []
     const longFormVideos = items.filter(item => !isShort(item))
-    return { videos: longFormVideos, error: null }
+    const latestShorts = items
+      .filter(isShort)
+      .sort((a, b) => new Date(b?.pubDate || 0) - new Date(a?.pubDate || 0))
+      .slice(0, 3)
+
+    return { videos: longFormVideos, shorts: latestShorts, error: null }
   } catch {
     return {
       videos: [],
+      shorts: [],
       error: 'Unable to load videos right now. Please try again shortly.',
     }
   }
 }
 
 export default function LatestVideos() {
-  const { videos, error } = useLoaderData()
+  const { videos, shorts, error } = useLoaderData()
 
   const videosToShow = videos.slice(0, 6)
+  const shortsToShow = shorts.slice(0, 3)
+
+  const formatViews = value => {
+    if (typeof value !== 'number') return ''
+    return new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+  }
 
   return (
     <section className="relative -mt-px overflow-hidden bg-transparent py-12 text-white md:py-20">
@@ -53,7 +66,7 @@ export default function LatestVideos() {
       <header className="relative mx-auto hidden max-w-5xl px-4 text-center md:block">
         <h1 className="text-4xl font-bold md:text-5xl">Latest Videos</h1>
         <p className="mx-auto mt-3 max-w-3xl text-gray-300">
-          Long-form uploads in an immersive rotating stack, pulled automatically from your channel feed.
+          Long-form uploads in an immersive rotating stack, plus the latest Shorts from your channel feed.
         </p>
       </header>
 
@@ -139,6 +152,48 @@ export default function LatestVideos() {
 
       {!error && videosToShow.length > 0 && (
         <p className="relative -mt-5 hidden px-4 text-center text-xs text-gray-400 md:block">Tip: hover to track each card as it rotates.</p>
+      )}
+
+      {!error && shortsToShow.length > 0 && (
+        <div className="relative mx-auto mt-10 max-w-7xl px-4">
+          <div className="rounded-3xl border border-white/10 bg-[#08142e]/55 p-5 backdrop-blur-md md:p-6">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-2xl font-bold text-white md:text-3xl">Latest Shorts Picks</h2>
+              <span className="rounded-full border border-orange-500/60 px-3 py-1 text-xs font-medium text-orange-100">At least 3 Shorts</span>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-3">
+              {shortsToShow.map(short => {
+                const videoId = extractVideoId(short?.link)
+                if (!videoId) return null
+
+                const published = short?.pubDate
+                  ? new Date(short.pubDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                  : ''
+                const views = formatViews(short?.views)
+                const shortTitle = decodeHtml(short?.title || 'YouTube short')
+
+                return (
+                  <article key={`short-${videoId}`} className="overflow-hidden rounded-2xl border border-white/10 bg-[#050b1a] p-3">
+                    <div className="relative aspect-9/16 w-full overflow-hidden rounded-xl bg-black">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${videoId}`}
+                        className="absolute inset-0 h-full w-full"
+                        title={shortTitle}
+                        allowFullScreen
+                      />
+                    </div>
+                    <h3 className="mt-3 line-clamp-2 text-sm font-semibold text-white">{shortTitle}</h3>
+                    <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
+                      <span>{published ? `Published ${published}` : 'Recently uploaded'}</span>
+                      {views && <span>{views} views</span>}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   )
