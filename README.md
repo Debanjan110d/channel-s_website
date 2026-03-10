@@ -9,8 +9,15 @@ Live site: https://gammercodeweb.vercel.app/
 
 ## Environment Variables
 - Create `.env` from `.env.example`
-- Required: `VITE_YOUTUBE_API_KEY`
+- Optional fallback only: `VITE_YOUTUBE_API_KEY`
 - Optional: `VITE_YOUTUBE_CHANNEL_ID` (defaults to `UChuGtKOtKDiEv-eaqhyyKpg`)
+
+## Daily YouTube Cache
+- App reads `public/data/youtube-cache.json` first to avoid frequent quota usage.
+- Generate/update cache manually: `npm run youtube:cache`
+- Auto-update runs daily via `.github/workflows/update-youtube-cache.yml` at `00:00 UTC`.
+- Add GitHub repository secret `YOUTUBE_API_KEY` (required for workflow).
+- Optional GitHub repository secret `YOUTUBE_CHANNEL_ID`.
 
 ## Run it locally
 - Install deps: `npm install`

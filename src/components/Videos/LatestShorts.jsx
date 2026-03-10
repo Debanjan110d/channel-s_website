@@ -56,9 +56,12 @@ export default function LatestShorts() {
       const videoId = extractVideoId(item?.link)
       if (!videoId || uniqueById.has(videoId)) return
 
+      const shortLink = item?.link || `https://www.youtube.com/shorts/${videoId}`
+
       uniqueById.set(videoId, {
         image: item?.thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
         text: item?.title || 'YouTube Short',
+        link: shortLink,
       })
     })
 
@@ -151,7 +154,7 @@ export default function LatestShorts() {
                   <p className="text-xs uppercase tracking-[0.2em] text-orange-300/80">Drag or wheel to explore</p>
                 </div>
 
-                <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#050b1a]">
+                <div className="overflow-hidden rounded-3xl bg-transparent">
                   <div style={{ height: 'clamp(460px, 72vh, 760px)', position: 'relative' }}>
                     <CircularGallery
                       items={galleryItems}
@@ -162,25 +165,6 @@ export default function LatestShorts() {
                       scrollEase={0.05}
                     />
                   </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {latestShorts.slice(0, 8).map(short => {
-                    const videoId = extractVideoId(short?.link)
-                    if (!videoId) return null
-                    const shortLink = short?.link || `https://www.youtube.com/shorts/${videoId}`
-                    return (
-                      <a
-                        key={`gallery-link-${videoId}`}
-                        href={shortLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-200 transition-colors hover:border-orange-400/70 hover:text-orange-200"
-                      >
-                        {short?.title || 'YouTube Short'}
-                      </a>
-                    )
-                  })}
                 </div>
               </section>
             )}

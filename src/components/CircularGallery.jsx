@@ -107,6 +107,7 @@ class Media {
     geometry,
     gl,
     image,
+    link,
     index,
     length,
     renderer,
@@ -123,6 +124,7 @@ class Media {
     this.geometry = geometry
     this.gl = gl
     this.image = image
+    this.link = link || ''
     this.index = index
     this.length = length
     this.renderer = renderer
@@ -372,18 +374,18 @@ class App {
 
   createMedias(items, bend = 1, textColor, borderRadius, font) {
     const defaultItems = [
-      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Bridge' },
-      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Desk Setup' },
-      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Waterfall' },
-      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Strawberries' },
-      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Deep Diving' },
-      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Train Track' },
-      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Santorini' },
-      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Blurry Lights' },
-      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'New York' },
-      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Good Boy' },
-      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Coastline' },
-      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: 'Palm Trees' }
+      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Bridge', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Desk Setup', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Waterfall', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Strawberries', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Deep Diving', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Train Track', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Santorini', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Blurry Lights', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'New York', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Good Boy', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Coastline', link: 'https://picsum.photos/' },
+      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: 'Palm Trees', link: 'https://picsum.photos/' }
     ]
 
     const galleryItems = (items && items.length ? items : defaultItems).slice(0, 12)
@@ -394,6 +396,7 @@ class App {
         geometry: this.planeGeometry,
         gl: this.gl,
         image: data.image,
+        link: data.link,
         index,
         length: this.mediasImages.length,
         renderer: this.renderer,
@@ -413,18 +416,72 @@ class App {
     this.isDown = true
     this.scroll.position = this.scroll.current
     this.start = e.clientX
+    this.startY = e.clientY
+    this.pointerMoved = false
   }
 
   onTouchMove(e) {
     if (!this.isDown) return
     const x = e.clientX
+    const y = e.clientY
+    if (Math.abs(this.start - x) > 8 || Math.abs(this.startY - y) > 8) {
+      this.pointerMoved = true
+    }
     const distance = (this.start - x) * (this.scrollSpeed * 0.025)
     this.scroll.target = this.scroll.position + distance
   }
 
-  onTouchUp() {
+  onTouchUp(e) {
+    if (!this.isDown) return
+    const shouldOpenLink = !this.pointerMoved
+
     this.isDown = false
     this.onCheck()
+
+    if (!shouldOpenLink) return
+    if (typeof e?.clientX !== 'number' || typeof e?.clientY !== 'number') return
+
+    this.openMediaLinkFromPoint(e.clientX, e.clientY)
+  }
+
+  getMediaFromPoint(clientX, clientY) {
+    if (!this.medias?.length || !this.viewport) return null
+
+    const rect = this.container.getBoundingClientRect()
+    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+      return null
+    }
+
+    const normalizedX = (clientX - rect.left) / rect.width - 0.5
+    const normalizedY = (clientY - rect.top) / rect.height - 0.5
+    const worldX = normalizedX * this.viewport.width
+    const worldY = -normalizedY * this.viewport.height
+
+    let bestMatch = null
+
+    this.medias.forEach(media => {
+      const halfWidth = media.plane.scale.x / 2
+      const halfHeight = media.plane.scale.y / 2
+      const dx = Math.abs(worldX - media.plane.position.x)
+      const dy = Math.abs(worldY - media.plane.position.y)
+
+      if (dx <= halfWidth && dy <= halfHeight) {
+        const score = dx + dy
+        if (!bestMatch || score < bestMatch.score) {
+          bestMatch = { media, score }
+        }
+      }
+    })
+
+    return bestMatch?.media || null
+  }
+
+  openMediaLinkFromPoint(clientX, clientY) {
+    const media = this.getMediaFromPoint(clientX, clientY)
+    const link = media?.link
+    if (!link) return
+
+    window.open(link, '_blank', 'noopener,noreferrer')
   }
 
   onWheel(e) {

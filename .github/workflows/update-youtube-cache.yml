@@ -1,0 +1,41 @@
+name: Update YouTube Cache
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build daily YouTube cache
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+        run: node scripts/update-youtube-cache.mjs
+
+      - name: Commit and push cache update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- public/data/youtube-cache.json; then
+            echo "No cache changes detected"
+            exit 0
+          fi
+
+          git add public/data/youtube-cache.json
+          git commit -m "chore: update youtube cache"
+          git push
