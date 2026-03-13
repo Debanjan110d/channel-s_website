@@ -16,6 +16,7 @@ import { githubStatsLoader } from './components/GithubStats/Github.jsx'
 import { latestVideosLoader } from './components/Videos/LatestVideos.jsx'
 import { latestShortsLoader } from './components/Videos/LatestShorts.jsx'
 import InitialRouteFallback from './components/common/InitialRouteFallback.jsx'
+import RouteErrorFallback from './components/common/RouteErrorFallback.jsx'
 
 
 // const router = createBrowserRouter([
@@ -37,7 +38,7 @@ import InitialRouteFallback from './components/common/InitialRouteFallback.jsx'
 
 const router =createBrowserRouter(
   createRoutesFromElements(// This is pretty new and very cool ,To me pretty easy to understand
-    <Route path='/' element={<Layout />}>
+    <Route path='/' element={<Layout />} errorElement={<RouteErrorFallback />}>
       <Route index element={<Home />} />
       <Route path='/about' element={<About />} />
       <Route path='/contact' element={<Contact />} />

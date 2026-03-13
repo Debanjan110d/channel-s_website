@@ -4,6 +4,7 @@ const DEFAULT_CHANNEL_ID = 'UChuGtKOtKDiEv-eaqhyyKpg'
 const FEED_CACHE_TTL_MS = 5 * 60 * 1000
 const MAX_UPLOADS = 50
 const SHORT_MAX_DURATION_SECONDS = 180
+const EMPTY_FEED = { items: [] }
 
 let cachedFeed = null
 let cachedAt = 0
@@ -166,7 +167,7 @@ async function fetchYoutubeApiFeed() {
     const channelId = (import.meta.env.VITE_YOUTUBE_CHANNEL_ID || DEFAULT_CHANNEL_ID).trim()
 
     if (!apiKey) {
-        throw new Error('Missing VITE_YOUTUBE_API_KEY environment variable')
+        return EMPTY_FEED
     }
 
     const uploadsPlaylistId = await getUploadsPlaylistId(apiKey, channelId)
@@ -187,7 +188,11 @@ async function fetchYoutubeFeed() {
     try {
         return await fetchDailyCachedFeed()
     } catch {
-        return fetchYoutubeApiFeed()
+        try {
+            return await fetchYoutubeApiFeed()
+        } catch {
+            return EMPTY_FEED
+        }
     }
 }
 
