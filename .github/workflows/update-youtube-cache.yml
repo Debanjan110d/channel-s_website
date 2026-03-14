@@ -2,7 +2,7 @@ name: Update YouTube Cache
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 
 permissions:
@@ -20,10 +20,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build daily YouTube cache
+      - name: Validate YouTube API secrets
         env:
-          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY || secrets.VITE_YOUTUBE_API_KEY }}
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then
+            echo "::error::Missing YouTube API key. Add GitHub secret YOUTUBE_API_KEY or VITE_YOUTUBE_API_KEY."
+            exit 1
+          fi
+
+      - name: Build YouTube cache
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY || secrets.VITE_YOUTUBE_API_KEY }}
+          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID || secrets.VITE_YOUTUBE_CHANNEL_ID }}
+          VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY || secrets.YOUTUBE_API_KEY }}
+          VITE_YOUTUBE_CHANNEL_ID: ${{ secrets.VITE_YOUTUBE_CHANNEL_ID || secrets.YOUTUBE_CHANNEL_ID }}
         run: node scripts/update-youtube-cache.mjs
 
       - name: Commit and push cache update

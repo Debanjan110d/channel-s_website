@@ -28,9 +28,9 @@ Live site: <https://gammercodeweb.vercel.app/>
 
 - App reads `public/data/youtube-cache.json` first to avoid frequent quota usage.
 - Generate/update cache manually: `npm run youtube:cache`
-- Auto-update runs daily via `.github/workflows/update-youtube-cache.yml` at `00:00 UTC`.
-- Add GitHub repository secret `YOUTUBE_API_KEY` (required for workflow).
-- Optional GitHub repository secret `YOUTUBE_CHANNEL_ID`.
+- Auto-update runs every 12 hours via `.github/workflows/update-youtube-cache.yml` (`0 */12 * * *`).
+- Add GitHub repository secret `YOUTUBE_API_KEY` or `VITE_YOUTUBE_API_KEY` (required for workflow).
+- Optional GitHub repository secret `YOUTUBE_CHANNEL_ID` or `VITE_YOUTUBE_CHANNEL_ID`.
 
 ## Run it locally
 
