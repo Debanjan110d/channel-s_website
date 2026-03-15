@@ -1,47 +1,9 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import path from 'node:path'
 import process from 'node:process'
 
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3'
 const DEFAULT_CHANNEL_ID = 'UChuGtKOtKDiEv-eaqhyyKpg'
 const SHORT_MAX_DURATION_SECONDS = 180
 const MAX_UPLOADS = 50
-
-function parseDotEnvLine(line) {
-    const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('#')) return null
-
-    const separatorIndex = trimmed.indexOf('=')
-    if (separatorIndex < 0) return null
-
-    const key = trimmed.slice(0, separatorIndex).trim()
-    if (!key) return null
-
-    let value = trimmed.slice(separatorIndex + 1).trim()
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1)
-    }
-
-    return { key, value }
-}
-
-async function loadEnvFromDotEnv() {
-    try {
-        const envFile = path.resolve(process.cwd(), '.env')
-        const fileContent = await readFile(envFile, 'utf8')
-        const lines = fileContent.split(/\r?\n/)
-
-        for (const line of lines) {
-            const parsed = parseDotEnvLine(line)
-            if (!parsed) continue
-            if (process.env[parsed.key] == null) {
-                process.env[parsed.key] = parsed.value
-            }
-        }
-    } catch {
-        // .env is optional for CI where secrets are injected directly.
-    }
-}
 
 function parseDurationToSeconds(duration) {
     if (!duration) return null
@@ -66,12 +28,19 @@ function resolveThumbnail(thumbnails) {
     )
 }
 
+function chunk(array, chunkSize) {
+    const output = []
+    for (let i = 0; i < array.length; i += chunkSize) {
+        output.push(array.slice(i, i + chunkSize))
+    }
+    return output
+}
+
 async function fetchJson(pathName, params, requestLabel) {
     const url = new URL(`${YOUTUBE_API_BASE_URL}/${pathName}`)
-    const search = new URLSearchParams(params)
-    url.search = search.toString()
+    url.search = new URLSearchParams(params).toString()
 
-    const response = await fetch(url.toString())
+    const response = await fetch(url)
 
     if (!response.ok) {
         const body = await response.text()
@@ -113,14 +82,6 @@ async function getLatestUploads(apiKey, uploadsPlaylistId) {
     )
 
     return Array.isArray(data?.items) ? data.items : []
-}
-
-function chunk(array, chunkSize) {
-    const output = []
-    for (let i = 0; i < array.length; i += chunkSize) {
-        output.push(array.slice(i, i + chunkSize))
-    }
-    return output
 }
 
 async function getVideoMetaByVideoId(apiKey, videoIds) {
@@ -187,13 +148,11 @@ function normalizeItem(upload, metaMap) {
 }
 
 async function buildFeed() {
-    await loadEnvFromDotEnv()
-
     const apiKey = (process.env.YOUTUBE_API_KEY || process.env.VITE_YOUTUBE_API_KEY || '').trim()
     const channelId = (process.env.YOUTUBE_CHANNEL_ID || process.env.VITE_YOUTUBE_CHANNEL_ID || DEFAULT_CHANNEL_ID).trim()
 
     if (!apiKey) {
-        throw new Error('Missing YOUTUBE_API_KEY (or VITE_YOUTUBE_API_KEY)')
+        throw new Error('Missing YOUTUBE_API_KEY')
     }
 
     const uploadsPlaylistId = await getUploadsPlaylistId(apiKey, channelId)
@@ -210,21 +169,23 @@ async function buildFeed() {
     }
 }
 
-async function main() {
-    const payload = await buildFeed()
-
-    const outputDir = path.resolve(process.cwd(), 'public', 'data')
-    const outputFile = path.join(outputDir, 'youtube-cache.json')
-
-    await mkdir(outputDir, { recursive: true })
-    await writeFile(outputFile, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
-
-    console.log(`YouTube cache updated: ${outputFile}`)
-    console.log(`Items: ${payload.items.length}`)
-    console.log(`Generated at: ${payload.generatedAt}`)
+function sendJson(res, status, payload) {
+    res.status(status)
+    res.setHeader('Cache-Control', 'no-store')
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.json(payload)
 }
 
-main().catch(error => {
-    console.error(error)
-    process.exit(1)
-})
+export default async function handler(_req, res) {
+    try {
+        const payload = await buildFeed()
+        sendJson(res, 200, payload)
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        sendJson(res, 503, {
+            generatedAt: new Date().toISOString(),
+            items: [],
+            error: message,
+        })
+    }
+}

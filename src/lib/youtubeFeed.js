@@ -1,4 +1,4 @@
-const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3'
+const RUNTIME_FEED_URL = '/api/youtube-feed'
 const DAILY_CACHE_URL = '/data/youtube-cache.json'
 const DEFAULT_CHANNEL_ID = 'UChuGtKOtKDiEv-eaqhyyKpg'
 const FEED_CACHE_TTL_MS = 5 * 60 * 1000
@@ -37,6 +37,23 @@ function isValidFeedPayload(data) {
     return Array.isArray(data?.items)
 }
 
+async function fetchRuntimeFeed() {
+    const response = await fetch(`${RUNTIME_FEED_URL}?t=${Date.now()}`, {
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        throw new Error('Runtime feed endpoint is not available')
+    }
+
+    const data = await response.json()
+    if (!isValidFeedPayload(data)) {
+        throw new Error('Runtime feed payload is invalid')
+    }
+
+    return data
+}
+
 async function fetchDailyCachedFeed() {
     const dayStamp = new Date().toISOString().slice(0, 10)
     const response = await fetch(`${DAILY_CACHE_URL}?d=${dayStamp}`, {
@@ -56,6 +73,7 @@ async function fetchDailyCachedFeed() {
 }
 
 async function fetchJson(path, params, requestLabel) {
+    const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3'
     const url = new URL(`${YOUTUBE_API_BASE_URL}/${path}`)
     const search = new URLSearchParams(params)
     url.search = search.toString()
@@ -186,12 +204,16 @@ async function fetchYoutubeApiFeed() {
 
 async function fetchYoutubeFeed() {
     try {
-        return await fetchDailyCachedFeed()
+        return await fetchRuntimeFeed()
     } catch {
         try {
-            return await fetchYoutubeApiFeed()
+            return await fetchDailyCachedFeed()
         } catch {
-            return EMPTY_FEED
+            try {
+                return await fetchYoutubeApiFeed()
+            } catch {
+                return EMPTY_FEED
+            }
         }
     }
 }

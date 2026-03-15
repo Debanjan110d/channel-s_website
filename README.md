@@ -11,8 +11,10 @@ Live site: <https://gammercodeweb.vercel.app/>
 ## Environment Variables
 
 - Create `.env` from `.env.example`
-- Optional fallback only: `VITE_YOUTUBE_API_KEY`
-- Optional: `VITE_YOUTUBE_CHANNEL_ID` (defaults to `UChuGtKOtKDiEv-eaqhyyKpg`)
+- Recommended for deployment/runtime API: `YOUTUBE_API_KEY`
+- Optional for deployment/runtime API: `YOUTUBE_CHANNEL_ID` (defaults to `UChuGtKOtKDiEv-eaqhyyKpg`)
+- Optional local fallback only: `VITE_YOUTUBE_API_KEY`
+- Optional local fallback only: `VITE_YOUTUBE_CHANNEL_ID`
 - Required for Contact form: `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 
 ## Vercel Deployment
@@ -21,16 +23,14 @@ Live site: <https://gammercodeweb.vercel.app/>
 - Install command: `npm install`
 - Build command: `npm run build`
 - Output directory: `dist`
-- Add these Environment Variables in Vercel Project Settings: `VITE_YOUTUBE_API_KEY`, `VITE_YOUTUBE_CHANNEL_ID`, `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
+- Add these Environment Variables in Vercel Project Settings: `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 - SPA routing is configured via `vercel.json` so route refreshes like `/about` or `/shorts` do not return 404.
 
-## Daily YouTube Cache
+## YouTube Refresh Strategy
 
-- App reads `public/data/youtube-cache.json` first to avoid frequent quota usage.
-- Generate/update cache manually: `npm run youtube:cache`
-- Auto-update runs every 12 hours via `.github/workflows/update-youtube-cache.yml` (`0 */12 * * *`).
-- Add GitHub repository secret `YOUTUBE_API_KEY` or `VITE_YOUTUBE_API_KEY` (required for workflow).
-- Optional GitHub repository secret `YOUTUBE_CHANNEL_ID` or `VITE_YOUTUBE_CHANNEL_ID`.
+- App fetches YouTube data from `/api/youtube-feed` at runtime, so fresh content is requested when visitors load the site.
+- If runtime API is unavailable, app falls back to `public/data/youtube-cache.json`, then to direct client API (only when `VITE_YOUTUBE_API_KEY` is set).
+- No scheduled GitHub Action is required for normal operation.
 
 ## Run it locally
 
