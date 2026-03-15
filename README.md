@@ -29,7 +29,7 @@ Live site: <https://gammercodeweb.vercel.app/>
 ## YouTube Refresh Strategy
 
 - App fetches YouTube data from `/api/youtube-feed` at runtime, so fresh content is requested when visitors load the site.
-- If runtime API is unavailable, app falls back to `public/data/youtube-cache.json`, then to direct client API (only when `VITE_YOUTUBE_API_KEY` is set).
+- If runtime API is unavailable, app falls back to direct client API (only when `VITE_YOUTUBE_API_KEY` is set).
 - No scheduled GitHub Action is required for normal operation.
 
 ## Run it locally

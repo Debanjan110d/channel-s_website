@@ -1,5 +1,4 @@
 const RUNTIME_FEED_URL = '/api/youtube-feed'
-const DAILY_CACHE_URL = '/data/youtube-cache.json'
 const DEFAULT_CHANNEL_ID = 'UChuGtKOtKDiEv-eaqhyyKpg'
 const FEED_CACHE_TTL_MS = 5 * 60 * 1000
 const MAX_UPLOADS = 50
@@ -49,24 +48,6 @@ async function fetchRuntimeFeed() {
     const data = await response.json()
     if (!isValidFeedPayload(data)) {
         throw new Error('Runtime feed payload is invalid')
-    }
-
-    return data
-}
-
-async function fetchDailyCachedFeed() {
-    const dayStamp = new Date().toISOString().slice(0, 10)
-    const response = await fetch(`${DAILY_CACHE_URL}?d=${dayStamp}`, {
-        cache: 'no-store',
-    })
-
-    if (!response.ok) {
-        throw new Error('Daily cache file is not available')
-    }
-
-    const data = await response.json()
-    if (!isValidFeedPayload(data)) {
-        throw new Error('Daily cache file is invalid')
     }
 
     return data
@@ -207,13 +188,9 @@ async function fetchYoutubeFeed() {
         return await fetchRuntimeFeed()
     } catch {
         try {
-            return await fetchDailyCachedFeed()
+            return await fetchYoutubeApiFeed()
         } catch {
-            try {
-                return await fetchYoutubeApiFeed()
-            } catch {
-                return EMPTY_FEED
-            }
+            return EMPTY_FEED
         }
     }
 }
