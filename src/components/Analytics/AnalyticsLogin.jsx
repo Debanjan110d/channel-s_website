@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { getAdminCredentialsHint, loginAdmin } from '../../lib/auth'
+import {  loginAdmin } from '../../lib/auth'
 
 function AnalyticsLogin({ onSuccess }) {
-  const credentialsHint = getAdminCredentialsHint()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -28,10 +27,6 @@ function AnalyticsLogin({ onSuccess }) {
         <p className="mt-2 text-sm sm:text-base text-gray-300">
           Enter admin credentials to open your private website analytics dashboard.
         </p>
-        <p className="mt-3 rounded-lg bg-orange-500/10 px-3 py-2 text-xs sm:text-sm text-orange-200">
-          Demo login: username <strong>{credentialsHint.username}</strong>, password <strong>{credentialsHint.password}</strong>
-        </p>
-
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="mb-2 block text-sm font-medium text-orange-200" htmlFor="analytics-username">
