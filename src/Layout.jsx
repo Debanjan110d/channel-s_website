@@ -3,20 +3,26 @@ import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import ClickSpark from './components/ClickSpark'
 import LightPillar from './components/LightPillar'
-import { Outlet } from 'react-router-dom'// It will make the page dynamic
+import { Outlet, useLocation } from 'react-router-dom'// It will make the page dynamic
 import RouteLoadingOverlay from './components/common/RouteLoadingOverlay'
 import LoadingOverlay from './components/common/LoadingOverlay'
+import { recordVisit } from './lib/analytics'
 
 const INITIAL_BOOT_OVERLAY_MS = 700
 
 function Layout() {
   const [showBootOverlay, setShowBootOverlay] = useState(true)
   const [isRouteOverlayVisible, setIsRouteOverlayVisible] = useState(false)
+  const location = useLocation()
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => setShowBootOverlay(false), INITIAL_BOOT_OVERLAY_MS)
     return () => window.clearTimeout(timeoutId)
   }, [])
+
+  useEffect(() => {
+    recordVisit(location.pathname)
+  }, [location.pathname])
 
   const animationsBlocked = showBootOverlay || isRouteOverlayVisible
 

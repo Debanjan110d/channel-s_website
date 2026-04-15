@@ -12,6 +12,7 @@ import Terms from './components/Terms/Terms.jsx'
 import User from './components/User/User.jsx'
 import LatestVideos from './components/Videos/LatestVideos.jsx'
 import LatestShorts from './components/Videos/LatestShorts.jsx'
+import AnalyticsPage from './components/Analytics/AnalyticsPage.jsx'
 import { githubStatsLoader } from './components/GithubStats/Github.jsx'
 import { latestVideosLoader } from './components/Videos/LatestVideos.jsx'
 import { latestShortsLoader } from './components/Videos/LatestShorts.jsx'
@@ -48,6 +49,8 @@ const router =createBrowserRouter(
       <Route path='/privacy' element={<Privacy />} />
       <Route path='/terms' element={<Terms />} />
       <Route path='/user/:userid' element={<User />} />
+      <Route path='/analytics' element={<AnalyticsPage />} />
+      <Route path='/analatics' element={<AnalyticsPage />} />
     </Route>
     
   )
